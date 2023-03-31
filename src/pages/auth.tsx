@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Image from 'next/image';
 import { Input } from '@/components';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 interface userType {
   email: string;
@@ -31,28 +31,63 @@ const Auth = () => {
       if(!(password === confirm)) {
         return;
       }
-      await axios.post("", user);
+      const status = await axios.post("https://mchdxcwjze.execute-api.us-east-1.amazonaws.com/dev/", user);
+      console.log(status);
+      setVariant(true);
     } catch (error) { console.log(error) }
   }
 
-  const login = async(user: userType) => {
-    try {
-      const response = await axios.post("", user)
-      // setLogedIn(response);
-    } catch (error) { console.log(error) }
-  }
-
-  const authentication = useCallback(() => {
-    if(
-      !password || !confirm || !email || !username
-    ) return;
-    const user = {
+  const login = async() => {
+    const data = {
       email,
       username,
-      password
+      password,
+      lastName: "battsengel",
+      firstName: "bilguun"
     }
-    variant ? login(user) : signup(user);
-  }, [email, username, password, confirm])
+    try {
+      // setLogedIn(response);
+      const status = await axios.post("https://mchdxcwjze.execute-api.us-east-1.amazonaws.com/dev/signin", data );
+      console.log(status);
+    } catch (error) { console.log(error) }
+  }
+
+  useEffect(() => {
+    console.log(variant);
+  }, [variant])
+
+  // const authentication = useCallback(() => {
+  //   if(
+  //     !password || !confirm || !email || !username
+  //   ) return;
+  //   const user = {
+  //     email,
+  //     username,
+  //     password,
+  //     lastName: "battsengel",
+  //     firstName: "bilguun"
+  //   }
+  //   // variant ? login(user) : signup(user);
+  //   if(variant) {
+  //     login(user);
+  //   } else signup(user);
+  // }, [])
+  const authentication = () => {
+    // if(
+    //   !password || !confirm || !email || !username
+    // ) return;
+    // const user = {
+    //   email,
+    //   username,
+    //   password,
+    //   lastName: "battsengel",
+    //   firstName: "bilguun"
+    // }
+    // // variant ? login(user) : signup(user);
+    // if(variant) {
+    //   login(user);
+    // } else signup(user);
+  }
   return (
     <section 
       className="
@@ -88,9 +123,9 @@ const Auth = () => {
         style={{ backgroundColor: 'rbga(255, 255, 255, 0.7)' }}
       >
         <Image 
-          src={require("../../public/vercel.svg")}
+          src={require("../../public/logo.png")}
           alt="Logo"
-          width={150}
+          width={200}
           height={50}
         />
         <div className='w-full flex flex-col items-center gap-2 my-12'>
@@ -114,7 +149,7 @@ const Auth = () => {
           })}
         </div>
         <button 
-          onClick={authentication}
+          onClick={login}
           className='
             rounded-lg 
             font-semibold 
